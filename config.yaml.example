@@ -1,0 +1,50 @@
+websites:
+  - name: 'website1'
+    accounts:
+      - username: 'username@example.com'
+        password: 'your_password_here'
+      - username: 'another_username@example.com'
+        password: 'your_another_password_here'
+    login_config:
+      login_page_url: 'https://example.com/auth/login'
+      username_element:
+        # selector available value:
+        # 'id', 'class', 'className', 'css', 'id',
+        # 'linkText', 'js', 'partialLinkText', 'tagName', 'xpath'
+        selector: 'id'
+        value: 'email'
+      password_element:
+        selector: 'id'
+        value: 'password'
+      submit_element:
+        selector: 'id'
+        value: 'login_submit'
+      login_successfully_page_url: 'https://example.com/user'
+    checkin_config:
+      checkin_page_url: 'https://example.com/user'
+      checkin_element:
+        selector: 'id'
+        value: 'checkin'
+  - name: 'website2'
+    accounts:
+      - username: 'username@example.com'
+        password: 'your_password_here'
+      - username: 'another_username@example.com'
+        password: 'your_another_password_here'
+    login_config:
+      login_page_url: 'https://example.com/auth/login'
+      username_element:
+        selector: 'id'
+        value: 'email'
+      password_element:
+        selector: 'id'
+        value: 'password'
+      submit_element:
+        selector: 'id'
+        value: 'login_submit'
+      login_successfully_page_url: 'https://example.com/user'
+    checkin_config:
+      checkin_page_url: 'https://example.com/user'
+      checkin_element:
+        selector: 'id'
+        value: 'checkin'

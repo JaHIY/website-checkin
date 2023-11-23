@@ -1,0 +1,29 @@
+{
+  "name": "website-checkin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "ts-node ./src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^11.1.0",
+    "dataclass": "^2.1.1",
+    "ramda": "^0.29.1",
+    "selenium-webdriver": "^4.15.0",
+    "winston": "^3.11.0",
+    "yaml": "^2.3.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.4",
+    "@types/ramda": "^0.29.9",
+    "@types/selenium-webdriver": "^4.1.20",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
+  }
+}
