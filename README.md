@@ -2,7 +2,7 @@
 
 Copy an example configuration file and rename it as `config.yaml`.
 ```
-$ cp ./config.yaml.example ./config.yaml
+$ cp ./config.example.yaml ./config.yaml
 ```
 Please set the urls, usernames, and passwords in the `config.yaml`.
 

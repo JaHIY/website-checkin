@@ -61,6 +61,7 @@ interface IPlainWebsite {
     login_config: IPlainLoginConfig;
     checkin_config: IPlainCheckinConfig;
 }
+
 const logger: winston.Logger = winston.createLogger({
     transports: [
         new winston.transports.Console({
