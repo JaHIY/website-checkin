@@ -88,6 +88,7 @@ async function setupWebDriver(): Promise<WebDriver> {
     const chromeOptions: Chrome.Options = new Chrome.Options();
     chromeOptions.headless();
     chromeOptions.setPageLoadStrategy('eager');
+    // ref: https://github.com/open-wa/wa-automate-nodejs/blob/master/src/config/puppeteer.config.ts
     chromeOptions.addArguments(
         '--log-level=3', // fatal only
         '--no-default-browser-check',
@@ -126,6 +127,7 @@ async function setupWebDriver(): Promise<WebDriver> {
         '--js-flags=--expose-gc',
         '--disable-features=site-per-process',
         '--disable-gl-drawing-for-tests',
+        //keep awake in all situations
         '--disable-background-timer-throttling',
         '--disable-backgrounding-occluded-windows',
         '--disable-renderer-backgrounding',
