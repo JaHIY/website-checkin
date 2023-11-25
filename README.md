@@ -53,3 +53,13 @@ The possible outputs are as follows.
 2023-11-23 06:05:48.723 | info  | Checkin
 2023-11-23 06:05:49.343 | info  | Checkin Completed
 ```
+
+```
+docker buildx build -t website-checkin:latest .
+```
+
+```
+$ docker run --name website-checkin \
+    --mount type=bind,source="$HOME/docker/website-checkin/config.yaml",target=/srv/config.yaml \
+    --init -d website-checkin:latest
+```
