@@ -31,34 +31,34 @@ interface Website {
     readonly checkinConfig: CheckinConfig;
 }
 
-interface IPlainAccount {
+interface PlainAccount {
     readonly username: string;
     readonly password: string;
 }
 
-interface IPlainElementSelector {
+interface PlainElementSelector {
     readonly selector: string;
     readonly value: string;
 }
 
-interface IPlainLoginConfig {
+interface PlainLoginConfig {
     readonly login_page_url: string;
-    readonly username_element: IPlainElementSelector;
-    readonly password_element: IPlainElementSelector;
-    readonly submit_element: IPlainElementSelector;
+    readonly username_element: PlainElementSelector;
+    readonly password_element: PlainElementSelector;
+    readonly submit_element: PlainElementSelector;
     readonly login_successfully_page_url: string;
 }
 
-interface IPlainCheckinConfig {
+interface PlainCheckinConfig {
     readonly checkin_page_url: string;
-    readonly checkin_element: IPlainElementSelector;
+    readonly checkin_element: PlainElementSelector;
 }
 
-interface IPlainWebsite {
+interface PlainWebsite {
     readonly name: string;
-    readonly accounts: IPlainAccount[];
-    readonly login_config: IPlainLoginConfig;
-    readonly checkin_config: IPlainCheckinConfig;
+    readonly accounts: PlainAccount[];
+    readonly login_config: PlainLoginConfig;
+    readonly checkin_config: PlainCheckinConfig;
 }
 
 const logger: winston.Logger = winston.createLogger({
@@ -232,18 +232,18 @@ async function readConfig(configFilePath: string) {
     return YAML.parse(file);
 }
 
-function toAccount(plainAccount: IPlainAccount): Account {
+function toAccount(plainAccount: PlainAccount): Account {
     return {
         username: plainAccount.username,
         password: plainAccount.password,
     };
 }
 
-function toAccounts(plainAccounts: IPlainAccount[]): Account[] {
+function toAccounts(plainAccounts: PlainAccount[]): Account[] {
     return R.map(toAccount, plainAccounts);
 }
 
-function toBy(es: IPlainElementSelector): By {
+function toBy(es: PlainElementSelector): By {
     const available_selectors = R.difference(Object.getOwnPropertyNames(By), ['length', 'prototype']);
     if (R.and(R.includes(es.selector, available_selectors), R.compose(R.is(Function), R.prop(es.selector))(By))) {
 
@@ -254,7 +254,7 @@ function toBy(es: IPlainElementSelector): By {
     throw new RangeError(`The selector '${es.selector}' is not availble in [${available_selectors.toString()}]`);
 }
 
-function toLoginConfig(plainLoginConfig: IPlainLoginConfig): LoginConfig {
+function toLoginConfig(plainLoginConfig: PlainLoginConfig): LoginConfig {
     return {
         loginPageUrl: new URL(plainLoginConfig.login_page_url),
         usernameSelector: toBy(plainLoginConfig.username_element),
@@ -264,14 +264,14 @@ function toLoginConfig(plainLoginConfig: IPlainLoginConfig): LoginConfig {
     };
 }
 
-function toCheckinConfig(plainCheckinConfig: IPlainCheckinConfig): CheckinConfig {
+function toCheckinConfig(plainCheckinConfig: PlainCheckinConfig): CheckinConfig {
     return {
         checkinPageUrl: new URL(plainCheckinConfig.checkin_page_url),
         checkinSelector: toBy(plainCheckinConfig.checkin_element),
     };
 }
 
-function toWebsite(plainWebsite: IPlainWebsite): Website {
+function toWebsite(plainWebsite: PlainWebsite): Website {
     return {
         name: plainWebsite.name,
         accounts: toAccounts(plainWebsite.accounts),
@@ -280,7 +280,7 @@ function toWebsite(plainWebsite: IPlainWebsite): Website {
     };
 }
 
-function toWebsites(plainWebsites: IPlainWebsite[]): Website[] {
+function toWebsites(plainWebsites: PlainWebsite[]): Website[] {
     return R.map(toWebsite, plainWebsites);
 }
 
