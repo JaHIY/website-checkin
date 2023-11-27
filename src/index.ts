@@ -61,6 +61,8 @@ interface PlainWebsite {
     readonly checkin_config: PlainCheckinConfig;
 }
 
+type SelectorName = keyof Omit<typeof By, "length" | "prototype" | "js">;
+
 const logger: winston.Logger = winston.createLogger({
     transports: [
         new winston.transports.Console({
@@ -243,15 +245,18 @@ function toAccounts(plainAccounts: PlainAccount[]): Account[] {
     return R.map(toAccount, plainAccounts);
 }
 
-function toBy(es: PlainElementSelector): By {
-    const available_selectors = R.difference(Object.getOwnPropertyNames(By), ['length', 'prototype']);
-    if (R.and(R.includes(es.selector, available_selectors), R.compose(R.is(Function), R.prop(es.selector))(By))) {
+function isSelectorName(s: string): s is SelectorName {
+    const available_selectors = R.difference(Object.getOwnPropertyNames(By), ['length', 'prototype', 'js']);
+    return R.and(R.includes(s, available_selectors), R.compose(R.is(Function), R.prop(s))(By));
+}
 
-        // @ts-ignore
+function toBy(es: PlainElementSelector): By {
+    if (isSelectorName(es.selector)) {
+
         return By[es.selector](es.value);
     }
 
-    throw new RangeError(`The selector '${es.selector}' is not availble in [${available_selectors.toString()}]`);
+    throw new RangeError(`The selector '${es.selector}' is not availble.`);
 }
 
 function toLoginConfig(plainLoginConfig: PlainLoginConfig): LoginConfig {

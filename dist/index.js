@@ -135,13 +135,15 @@ function toAccount(plainAccount) {
 function toAccounts(plainAccounts) {
     return ramda_1.default.map(toAccount, plainAccounts);
 }
+function isSelectorName(s) {
+    const available_selectors = ramda_1.default.difference(Object.getOwnPropertyNames(selenium_webdriver_1.By), ['length', 'prototype', 'js']);
+    return ramda_1.default.and(ramda_1.default.includes(s, available_selectors), ramda_1.default.compose(ramda_1.default.is(Function), ramda_1.default.prop(s))(selenium_webdriver_1.By));
+}
 function toBy(es) {
-    const available_selectors = ramda_1.default.difference(Object.getOwnPropertyNames(selenium_webdriver_1.By), ['length', 'prototype']);
-    if (ramda_1.default.and(ramda_1.default.includes(es.selector, available_selectors), ramda_1.default.compose(ramda_1.default.is(Function), ramda_1.default.prop(es.selector))(selenium_webdriver_1.By))) {
-        // @ts-ignore
+    if (isSelectorName(es.selector)) {
         return selenium_webdriver_1.By[es.selector](es.value);
     }
-    throw new RangeError(`The selector '${es.selector}' is not availble in [${available_selectors.toString()}]`);
+    throw new RangeError(`The selector '${es.selector}' is not availble.`);
 }
 function toLoginConfig(plainLoginConfig) {
     return {
