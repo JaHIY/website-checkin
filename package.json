@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "commander": "^11.1.0",
-    "dataclass": "^2.1.1",
     "ramda": "^0.29.1",
     "selenium-webdriver": "^4.15.0",
     "winston": "^3.11.0",

@@ -19,40 +19,6 @@ const commander_1 = require("commander");
 const promises_1 = __importDefault(require("node:fs/promises"));
 const yaml_1 = __importDefault(require("yaml"));
 const ramda_1 = __importDefault(require("ramda"));
-const dataclass_1 = require("dataclass");
-class Account extends dataclass_1.Data {
-    constructor() {
-        super(...arguments);
-        this.username = 'defaultUsername';
-        this.password = 'defaultPassword';
-    }
-}
-class LoginConfig extends dataclass_1.Data {
-    constructor() {
-        super(...arguments);
-        this.loginPageUrl = new URL('https://example.com');
-        this.usernameSelector = new selenium_webdriver_1.By('', '');
-        this.passwordSelector = new selenium_webdriver_1.By('', '');
-        this.submitSelector = new selenium_webdriver_1.By('', '');
-        this.loginSuccessfullyPageUrl = new URL('https://example.com');
-    }
-}
-class CheckinConfig extends dataclass_1.Data {
-    constructor() {
-        super(...arguments);
-        this.checkinPageUrl = new URL('https://example.com');
-        this.checkinSelector = new selenium_webdriver_1.By('', '');
-    }
-}
-class Website extends dataclass_1.Data {
-    constructor() {
-        super(...arguments);
-        this.name = 'defaultWebsite';
-        this.accounts = [Account.create()];
-        this.loginConfig = LoginConfig.create();
-        this.checkinConfig = CheckinConfig.create();
-    }
-}
 const logger = winston_1.default.createLogger({
     transports: [
         new winston_1.default.transports.Console({
@@ -161,10 +127,10 @@ function readConfig(configFilePath) {
     });
 }
 function toAccount(plainAccount) {
-    return Account.create({
+    return {
         username: plainAccount.username,
         password: plainAccount.password,
-    });
+    };
 }
 function toAccounts(plainAccounts) {
     return ramda_1.default.map(toAccount, plainAccounts);
@@ -178,27 +144,27 @@ function toBy(es) {
     throw new RangeError(`The selector '${es.selector}' is not availble in [${available_selectors.toString()}]`);
 }
 function toLoginConfig(plainLoginConfig) {
-    return LoginConfig.create({
+    return {
         loginPageUrl: new URL(plainLoginConfig.login_page_url),
         usernameSelector: toBy(plainLoginConfig.username_element),
         passwordSelector: toBy(plainLoginConfig.password_element),
         submitSelector: toBy(plainLoginConfig.submit_element),
         loginSuccessfullyPageUrl: new URL(plainLoginConfig.login_successfully_page_url),
-    });
+    };
 }
 function toCheckinConfig(plainCheckinConfig) {
-    return CheckinConfig.create({
+    return {
         checkinPageUrl: new URL(plainCheckinConfig.checkin_page_url),
         checkinSelector: toBy(plainCheckinConfig.checkin_element),
-    });
+    };
 }
 function toWebsite(plainWebsite) {
-    return Website.create({
+    return {
         name: plainWebsite.name,
         accounts: toAccounts(plainWebsite.accounts),
         loginConfig: toLoginConfig(plainWebsite.login_config),
         checkinConfig: toCheckinConfig(plainWebsite.checkin_config),
-    });
+    };
 }
 function toWebsites(plainWebsites) {
     return ramda_1.default.map(toWebsite, plainWebsites);

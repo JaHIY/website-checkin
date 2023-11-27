@@ -5,61 +5,60 @@ import { Command } from 'commander';
 import fs from 'node:fs/promises';
 import YAML from 'yaml';
 import R from 'ramda';
-import { Data } from 'dataclass';
 
-class Account extends Data {
-    username: string = 'defaultUsername';
-    password: string = 'defaultPassword';
+interface Account {
+    readonly username: string;
+    readonly password: string;
 }
 
-class LoginConfig extends Data {
-    loginPageUrl: URL = new URL('https://example.com');
-    usernameSelector: By = new By('', '');
-    passwordSelector: By = new By('', '');
-    submitSelector: By = new By('', '');
-    loginSuccessfullyPageUrl: URL = new URL('https://example.com');
+interface LoginConfig {
+    readonly loginPageUrl: URL;
+    readonly usernameSelector: By;
+    readonly passwordSelector: By;
+    readonly submitSelector: By;
+    readonly loginSuccessfullyPageUrl: URL;
 }
 
-class CheckinConfig extends Data {
-    checkinPageUrl: URL = new URL('https://example.com');
-    checkinSelector: By = new By('', '');
+interface CheckinConfig {
+    readonly checkinPageUrl: URL;
+    readonly checkinSelector: By;
 }
 
-class Website extends Data {
-    name: string = 'defaultWebsite';
-    accounts: Account[] = [Account.create()];
-    loginConfig: LoginConfig = LoginConfig.create();
-    checkinConfig: CheckinConfig = CheckinConfig.create();
+interface Website {
+    readonly name: string;
+    readonly accounts: Account[];
+    readonly loginConfig: LoginConfig;
+    readonly checkinConfig: CheckinConfig;
 }
 
 interface IPlainAccount {
-    username: string;
-    password: string;
+    readonly username: string;
+    readonly password: string;
 }
 
 interface IPlainElementSelector {
-    selector: string;
-    value: string;
+    readonly selector: string;
+    readonly value: string;
 }
 
 interface IPlainLoginConfig {
-    login_page_url: string;
-    username_element: IPlainElementSelector;
-    password_element: IPlainElementSelector;
-    submit_element: IPlainElementSelector;
-    login_successfully_page_url: string;
+    readonly login_page_url: string;
+    readonly username_element: IPlainElementSelector;
+    readonly password_element: IPlainElementSelector;
+    readonly submit_element: IPlainElementSelector;
+    readonly login_successfully_page_url: string;
 }
 
 interface IPlainCheckinConfig {
-    checkin_page_url: string;
-    checkin_element: IPlainElementSelector;
+    readonly checkin_page_url: string;
+    readonly checkin_element: IPlainElementSelector;
 }
 
 interface IPlainWebsite {
-    name: string;
-    accounts: IPlainAccount[];
-    login_config: IPlainLoginConfig;
-    checkin_config: IPlainCheckinConfig;
+    readonly name: string;
+    readonly accounts: IPlainAccount[];
+    readonly login_config: IPlainLoginConfig;
+    readonly checkin_config: IPlainCheckinConfig;
 }
 
 const logger: winston.Logger = winston.createLogger({
@@ -234,10 +233,10 @@ async function readConfig(configFilePath: string) {
 }
 
 function toAccount(plainAccount: IPlainAccount): Account {
-    return Account.create({
+    return {
         username: plainAccount.username,
         password: plainAccount.password,
-    });
+    };
 }
 
 function toAccounts(plainAccounts: IPlainAccount[]): Account[] {
@@ -256,29 +255,29 @@ function toBy(es: IPlainElementSelector): By {
 }
 
 function toLoginConfig(plainLoginConfig: IPlainLoginConfig): LoginConfig {
-    return LoginConfig.create({
+    return {
         loginPageUrl: new URL(plainLoginConfig.login_page_url),
         usernameSelector: toBy(plainLoginConfig.username_element),
         passwordSelector: toBy(plainLoginConfig.password_element),
         submitSelector: toBy(plainLoginConfig.submit_element),
         loginSuccessfullyPageUrl: new URL(plainLoginConfig.login_successfully_page_url),
-    });
+    };
 }
 
 function toCheckinConfig(plainCheckinConfig: IPlainCheckinConfig): CheckinConfig {
-    return CheckinConfig.create({
+    return {
         checkinPageUrl: new URL(plainCheckinConfig.checkin_page_url),
         checkinSelector: toBy(plainCheckinConfig.checkin_element),
-    });
+    };
 }
 
 function toWebsite(plainWebsite: IPlainWebsite): Website {
-    return Website.create({
+    return {
         name: plainWebsite.name,
         accounts: toAccounts(plainWebsite.accounts),
         loginConfig: toLoginConfig(plainWebsite.login_config),
         checkinConfig: toCheckinConfig(plainWebsite.checkin_config),
-    });
+    };
 }
 
 function toWebsites(plainWebsites: IPlainWebsite[]): Website[] {
