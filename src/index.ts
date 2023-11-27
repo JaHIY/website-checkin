@@ -195,7 +195,7 @@ async function clickCheckinElement(driver: WebDriver,
 
         if (e instanceof error.NoSuchElementError) {
 
-            logger.error('Cannot find checkinButton. You may have already checked in!');
+            logger.error('Cannot find checkinElement. You may have already checked in!');
             return;
 
         } else {

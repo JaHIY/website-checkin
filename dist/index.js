@@ -70,7 +70,13 @@ function setupWebDriver() {
         const chromeOptions = new chrome_1.default.Options();
         chromeOptions.headless();
         chromeOptions.setPageLoadStrategy('eager');
-        chromeOptions.addArguments('--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage');
+        // ref: https://github.com/open-wa/wa-automate-nodejs/blob/master/src/config/puppeteer.config.ts
+        chromeOptions.addArguments('--log-level=3', // fatal only
+        '--no-default-browser-check', '--disable-site-isolation-trials', '--no-experiments', '--ignore-gpu-blacklist', '--ignore-certificate-errors', '--ignore-certificate-errors-spki-list', '--disable-gpu', '--disable-extensions', '--disable-default-apps', '--enable-features=NetworkService', '--disable-setuid-sandbox', '--no-sandbox', 
+        // Extra
+        '--disable-webgl', '--disable-infobars', '--window-position=0,0', '--ignore-certifcate-errors', '--ignore-certifcate-errors-spki-list', '--disable-threaded-animation', '--disable-threaded-scrolling', '--disable-in-process-stack-traces', '--disable-histogram-customizer', '--disable-gl-extensions', '--disable-composited-antialiasing', '--disable-session-crashed-bubble', '--disable-canvas-aa', '--disable-3d-apis', '--disable-accelerated-2d-canvas', '--disable-accelerated-jpeg-decoding', '--disable-accelerated-mjpeg-decode', '--disable-app-list-dismiss-on-blur', '--disable-accelerated-video-decode', '--disable-dev-shm-usage', '--js-flags=--expose-gc', '--disable-features=site-per-process', '--disable-gl-drawing-for-tests', 
+        //keep awake in all situations
+        '--disable-background-timer-throttling', '--disable-backgrounding-occluded-windows', '--disable-renderer-backgrounding');
         const driver = yield new selenium_webdriver_1.Builder()
             .forBrowser('chrome')
             .setChromeOptions(chromeOptions)
@@ -119,7 +125,7 @@ function clickCheckinElement(driver, checkinConfig) {
         }
         catch (e) {
             if (e instanceof selenium_webdriver_1.error.NoSuchElementError) {
-                logger.error('Cannot find checkinButton. You may have already checked in!');
+                logger.error('Cannot find checkinElement. You may have already checked in!');
                 return;
             }
             else {
